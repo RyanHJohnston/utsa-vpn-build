@@ -103,13 +103,9 @@ esac
 if [[ $ID_LIKE == "ubuntu debian" ]];
 then
         printf "$open_msg"
-        repo_add=$(add-apt-repository ppa:yuezk/globalprotect-openconnect)
-        if [[ $repo_add == *"gpg: keyserver receive failed: General error"* ]];
-        then
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7937C393082992E5D6E4A60453FC26B43838D761
-        fi
-        apt-get update
-        apt-get install globalprotect-openconnect
+        add-apt-repository ppa:yuezk/globalprotect-openconnect) -y
+        apt-get update -y
+        apt-get install globalprotect-openconnect -y
         gpclient-info
         exit
     else
