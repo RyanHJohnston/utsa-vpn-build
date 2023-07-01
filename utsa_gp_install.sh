@@ -17,12 +17,23 @@
 
 # Program: CLI only
 # Determine the Linux distro and version
+
+# Was originally supposed to ask the user if they wanted to run the program
+# It's simply not possible
+# It's best to make this function just an info dump
+function gpclient-info {
+    printf "\n-----------------------------------------------------------------------\n
+              Global Protect VPN for UTSA is installed\n
+              Run the VPN by typing: gpclient\n
+              Portal Address: vpn-pa.it.utsa.edu
+            \n-----------------------------------------------------------------------\n\n"
+}
+
 source /etc/os-release
 kernel_ver=$(uname -r)
 open_msg="\n-----------------------------------------------------------------------\n
             Installing Global Protect VPN for UTSA on $ID
           \n-----------------------------------------------------------------------\n\n"
-closing_msg="\nGlobal Protect for UTSA installed.\n\n"
 
 # Check the version of the distro if ubuntu, rhel, or centos
 if [ $ID == "ubuntu" ]; then
@@ -48,12 +59,12 @@ case $ID in
                 ;&
             18)
                 apt-get install ./GlobalProtect_deb-*.deb
-                printf "$closing_msg"
+                gpclient-info
                 exit
                 ;;
             *)
                 apt-get install ./GlobalProtect_focal_deb-*.deb
-                printf "$closing_msg"
+                gpclient-info
                 exit
                 ;;
         esac
@@ -67,7 +78,7 @@ case $ID in
             yum -y remove globalprotect 
         fi
         dnf install GlobalProtect_rpm-*.rpm
-        printf "$closing_msg"
+        gpclient-info
         exit
         ;;
     rhel)
@@ -78,10 +89,10 @@ case $ID in
         if [[ $pacman_output == *": globalprotect-openconnect"* ]];
         then
             printf "\nOld version of Global Protect detected VPN, uninstalling...\n\n"
-            pacman -Rs globalprotect-openconnect
+            pacman -Rs globalprotect-openconnect --noconfirm
         fi
         pacman -S globalprotect-openconnect --noconfirm
-        printf "$closing_msg"
+        gpclient-info
         exit
         ;;
     *)
@@ -99,7 +110,7 @@ then
         fi
         apt-get update
         apt-get install globalprotect-openconnect
-        printf "$closing_msg"
+        gpclient-info
         exit
     else
         printf "\nERROR: Linux Distribution not found.\n\n"
