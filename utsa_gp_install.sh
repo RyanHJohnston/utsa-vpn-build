@@ -63,7 +63,7 @@ case $ID in
         yum_output=$(yum list installed | grep globalprotect)
         if [[ $yum_output == *"globalprotect.x86"* ]];
         then
-            printf "Old version of Global Protect detected, uninstalling...\n\n"
+            printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
             yum -y remove globalprotect 
         fi
         dnf install GlobalProtect_rpm-*.rpm
@@ -77,7 +77,7 @@ case $ID in
         pacman_output=$(pacman -Qi globalprotect-openconnect)
         if [[ $pacman_output == *": globalprotect-openconnect"* ]];
         then
-            printf "Old version of Global Protect detected VPN, uninstalling...\n\n"
+            printf "\nOld version of Global Protect detected VPN, uninstalling...\n\n"
             pacman -Rs globalprotect-openconnect
         fi
         pacman -S globalprotect-openconnect --noconfirm
@@ -85,7 +85,7 @@ case $ID in
         exit
         ;;
     *)
-        printf "ERROR: Linux Distrubtion not found, installing for Debian.\n\n"
+        printf "\nERROR: Linux Distrubtion not found, installing for Debian.\n\n"
         ;;
 esac
 
