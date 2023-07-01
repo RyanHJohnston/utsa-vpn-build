@@ -6,7 +6,7 @@
 # Department: UTS
 
 # Note: run this script as sudoer
-# Ex. sudo ./install.sh
+# Ex. sudo ./utsa_gp_install.sh
 ######################################################
 
 #  _   _ _____ ____    _    
@@ -24,6 +24,7 @@
 function gpclient-info {
     printf "\n-----------------------------------------------------------------------\n
               Global Protect VPN for UTSA is installed\n
+              To uninstall, simply type: sudo apt-get remove globalprotect-openvpn -y\n
               Run the VPN by typing: gpclient\n
               Portal Address: vpn-pa.it.utsa.edu
             \n-----------------------------------------------------------------------\n\n"
