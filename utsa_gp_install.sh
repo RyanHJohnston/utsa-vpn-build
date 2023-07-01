@@ -3,7 +3,7 @@
 ######################################################
 # Author: Ryan H. Johnston
 # ID: ide709
-# Department: UTS
+# Department: Tech Cafe
 
 # Note: run this script as sudoer
 # Ex. sudo ./utsa_gp_install.sh
