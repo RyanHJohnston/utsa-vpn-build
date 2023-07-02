@@ -21,15 +21,24 @@
 # Was originally supposed to ask the user if they wanted to run the program
 # It's simply not possible
 # It's best to make this function just an info dump
-function gpclient-info {
+gpclient_info() 
+{
+    INST=$1
     printf "\n-----------------------------------------------------------------------\n
               Global Protect VPN for UTSA is installed\n
-              To uninstall, simply type: sudo apt-get remove globalprotect-openvpn -y\n
+              To uninstall, simply type: $INST globalprotect-openconnect\n
               Run the VPN by typing: gpclient\n
               Portal Address: vpn-pa.it.utsa.edu
             \n-----------------------------------------------------------------------\n\n"
 }
 
+# Must be run as root
+if [ "$EUID" -ne 0 ]; then
+	printf "ERROR: Please run this script as root.\n"
+	exit 1
+fi
+
+# Run os-release file to get environment variables
 source /etc/os-release
 kernel_ver=$(uname -r)
 open_msg="\n-----------------------------------------------------------------------\n
@@ -47,12 +56,15 @@ fi
 case $ID in
     ubuntu)
         printf "$open_msg"
+        
         apt_output=$(apt list --installed | grep globalprotect)
+        
         if [[ $apt_output == *"globalprotect"* ]]; 
         then
             printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
             apt-get purge *globalprotect* -y
         fi
+        
         case $linux_ver in
             14)
                 ;&
@@ -60,56 +72,76 @@ case $ID in
                 ;&
             18)
                 apt-get install ./GlobalProtect_deb-*.deb
-                gpclient-info
-                exit
+                gpclient_info "sudo apt-get remove"
+                exit 0
                 ;;
             *)
                 apt-get install ./GlobalProtect_focal_deb-*.deb
-                gpclient-info
-                exit
+                gpclient_info "sudo apt-get remove"
+                exit 0
                 ;;
         esac
         ;;
     fedora)
         printf "$open_msg"
+        
         yum_output=$(yum list installed | grep globalprotect)
+        
         if [[ $yum_output == *"globalprotect.x86"* ]];
         then
             printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
             yum -y remove globalprotect 
         fi
+        
         dnf install GlobalProtect_rpm-*.rpm
-        gpclient-info
+        
+        gpclient_info "sudo dnf remove"
+        
         exit
         ;;
     rhel)
         ;&
     arch)
         printf "$open_msg"
+        
         pacman_output=$(pacman -Qi globalprotect-openconnect)
+        
         if [[ $pacman_output == *": globalprotect-openconnect"* ]];
         then
             printf "\nOld version of Global Protect detected VPN, uninstalling...\n\n"
             pacman -Rs globalprotect-openconnect --noconfirm
         fi
+        
         pacman -S globalprotect-openconnect --noconfirm
-        gpclient-info
-        exit
+        
+        gpclient_info "sudo pacman -R"
+        
+        exit 0
         ;;
     *)
         printf "\nERROR: Linux Distrubtion not found, installing for Debian.\n\n"
         ;;
 esac
 
+# If not Ubuntu but is a debian distro
 if [[ $ID_LIKE == "ubuntu debian" ]];
 then
         printf "$open_msg"
-        add-apt-repository ppa:yuezk/globalprotect-openconnect -y
-        apt-get update -y
-        apt-get install globalprotect-openconnect -y
-        gpclient-info
+        
+        apt_output=$(apt list --installed | grep globalprotect)
+        
+        if [[ $apt_output == *"globalprotect"* ]]; 
+        then
+            printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
+            apt-get purge *globalprotect* -y
+        fi
+        
+        apt-get install ./GlobalProtect_deb-*.deb
+        
+        gpclient_info "sudo apt-get remove"
+        
         exit
     else
         printf "\nERROR: Linux Distribution not found.\n\n"
-        exit
+        exit 1
 fi
