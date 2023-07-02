@@ -15,18 +15,14 @@
 # | |_| | | |  ___) / ___ \ 
 #  \___/  |_| |____/_/   \_\
 
-# Program: CLI only
-# Determine the Linux distro and version
-
-# Was originally supposed to ask the user if they wanted to run the program
-# It's simply not possible
-# It's best to make this function just an info dump
+# Global Protect VPN info after installation
 gpclient_info() 
 {
-    INST=$1
+    inst=$1
+    arch=$2
     printf "\n-----------------------------------------------------------------------\n
               Global Protect VPN for UTSA is installed\n
-              To uninstall, simply type: $INST globalprotect-openconnect\n
+              To uninstall, simply type: $inst globalprotect$arch\n
               Run the VPN by typing: gpclient\n
               Portal Address: vpn-pa.it.utsa.edu
             \n-----------------------------------------------------------------------\n\n"
@@ -97,7 +93,7 @@ case $ID in
         
         gpclient_info "sudo dnf remove"
         
-        exit
+        exit 0
         ;;
     rhel)
         ;&
@@ -114,7 +110,7 @@ case $ID in
         
         pacman -S globalprotect-openconnect --noconfirm
         
-        gpclient_info "sudo pacman -R"
+        gpclient_info "sudo pacman -R" "-openconnect"
         
         exit 0
         ;;
