@@ -148,7 +148,9 @@ esac
 if [[ $ID_LIKE == "ubuntu debian" ]];
 then
     printf "$open_msg"
-    apt-get install globalprotect-openconnect -y	
+    sudo add-apt-repository ppa:yuezk/globalprotect-openconnect
+    sudo apt-get update
+    sudo apt-get install globalprotect-openconnect -y
     verify-cert	
     gpclient_info "sudo apt-get remove" "-openconnect"
     exit 0
