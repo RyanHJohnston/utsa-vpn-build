@@ -39,8 +39,16 @@ verify-cert()
 {
     PIN="9qJPX5obul5UwvU/73D3ZmK6ewOu9upm2ga1NFKRiXs="
     GP_CONF=/etc/gpservice/gp.conf
-    echo "[vpn.utsa.edu]" >> $GP_CONF
-    echo "openconnect-args=--servercert pin-sha256:$PIN" >> $GP_CONF
+	if [ -f $GP_CONF ]; then
+		printf "$GP_CONF exists, appending cert pin\n"
+    		echo "[vpn.utsa.edu]" >> $GP_CONF
+    		echo "openconnect-args=--servercert pin-sha256:$PIN" >> $GP_CONF
+	else
+		printf "Creating $GP_CONF\n"
+		touch /etc/gpservice/gp.conf
+    		echo "[vpn.utsa.edu]" >> $GP_CONF
+    		echo "openconnect-args=--servercert pin-sha256:$PIN" >> $GP_CONF
+	fi
 }
 
 # Run os-release file to get environment variables
@@ -132,17 +140,9 @@ esac
 if [[ $ID_LIKE == "ubuntu debian" ]];
 then
         printf "$open_msg"
-        
-        apt_output=$(apt list --installed | grep globalprotect)
-        
-        if [[ $apt_output == *"globalprotect"* ]]; 
-        then
-            printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
-            apt-get purge *globalprotect* -y
-        fi
-        
-        apt-get install ./GlobalProtect_deb-*.deb
-        verify-cert 
+       
+	apt-get install globalprotect-openconnect -y	
+       	verify-cert	
         gpclient_info "sudo apt-get remove"
         
         exit
@@ -150,4 +150,3 @@ then
         printf "\nERROR: Linux Distribution not found.\n\n"
         exit 1
 fi
-
