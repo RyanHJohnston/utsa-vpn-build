@@ -34,6 +34,15 @@ if [ "$EUID" -ne 0 ]; then
 	exit 1
 fi
 
+# If installed using globalprotect-openconnect package
+verify-cert() 
+{
+    PIN="9qJPX5obul5UwvU/73D3ZmK6ewOu9upm2ga1NFKRiXs="
+    GP_CONF=/etc/gpservice/gp.conf
+    echo "[vpn.utsa.edu]" >> $GP_CONF
+    echo "openconnect-args=--servercert pin-sha256:$PIN" >> $GP_CONF
+}
+
 # Run os-release file to get environment variables
 source /etc/os-release
 kernel_ver=$(uname -r)
@@ -109,7 +118,7 @@ case $ID in
         fi
         
         pacman -S globalprotect-openconnect --noconfirm
-        
+        verify-cert
         gpclient_info "sudo pacman -R" "-openconnect"
         
         exit 0
@@ -133,7 +142,7 @@ then
         fi
         
         apt-get install ./GlobalProtect_deb-*.deb
-        
+        verify-cert 
         gpclient_info "sudo apt-get remove"
         
         exit
@@ -141,3 +150,4 @@ then
         printf "\nERROR: Linux Distribution not found.\n\n"
         exit 1
 fi
+
