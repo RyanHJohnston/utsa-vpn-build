@@ -150,7 +150,7 @@ then
     printf "$open_msg"
     apt-get install globalprotect-openconnect -y	
     verify-cert	
-    gpclient_info "sudo apt-get remove"
+    gpclient_info "sudo apt-get remove" "-openconnect"
     exit 0
 else
     printf "\nERROR: Linux Distribution not found.\n\n"
