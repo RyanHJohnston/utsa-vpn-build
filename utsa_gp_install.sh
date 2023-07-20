@@ -35,7 +35,7 @@ gpclient_info()
     Global Protect VPN for UTSA is installed\n
     To uninstall, simply type: $inst globalprotect$arch\n
     Run the VPN by typing: gpclient\n
-    Portal Address: vpn-pa.it.utsa.edu
+    Portal Address: vpn.utsa.edu
     \n-----------------------------------------------------------------------\n\n"
 }
 
