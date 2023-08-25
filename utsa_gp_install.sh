@@ -85,7 +85,7 @@ case $ID in
 
         if [[ $apt_output == *"globalprotect"* ]]; 
         then
-            printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
+            printf "\nRemoving installed version of GlobalProtect...\n\n"
             apt-get purge *globalprotect* -y
         fi
 
@@ -105,6 +105,14 @@ case $ID in
                 exit 0
                 ;;
         esac
+        
+        # If .deb packages weren't found, install the openconnect package
+        add-apt-repository ppa:yuezk/globalprotect-openconnect -y
+        apt-get update -y
+        apt-get install globalprotect-openconnect -y
+        verify-cert
+        gpclient_info "sudo apt-get remove" "-openconnect"
+        
         ;;
     fedora)
         printf "$open_msg"
@@ -113,30 +121,30 @@ case $ID in
 
         if [[ $yum_output == *"globalprotect.x86"* ]];
         then
-            printf "\nOld version of Global Protect VPN detected, uninstalling...\n\n"
-            yum -y remove globalprotect 
+            printf "\nInstallig most recent version of GlobalProtect\n\n"
+            dnf install GlobalProtect_rpm-*.rpm
+            gpclient_info "sudo dnf remove"
+        else
+            printf "\nInstalling globalprotect-openconnect\n\n"
+            dnf install 'dnf-command(copr)' -y
+            dnf copr enable yuezk/globalprotect-openconnect -y
+            dnf install globalprotect-openconnect -y
+            verify-cert
+            gpclient_info "sudo dnf remove" "-openconnect"
         fi
 
-        dnf install GlobalProtect_rpm-*.rpm
-        gpclient_info "sudo dnf remove"
         exit 0
         ;;
     rhel)
         ;&
     arch)
         printf "$open_msg"
-
-        pacman_output=$(pacman -Qi globalprotect-openconnect)
-
-        if [[ $pacman_output == *": globalprotect-openconnect"* ]];
-        then
-            printf "\nOld version of Global Protect detected VPN, uninstalling...\n\n"
-            pacman -Rs globalprotect-openconnect --noconfirm
-        fi
-
+        printf "\nInstalling most recent version of globalprotect-openconnect from the official Arch repository...\n\n"
+        
         pacman -S globalprotect-openconnect --noconfirm
         verify-cert
         gpclient_info "sudo pacman -R" "-openconnect"
+
         exit 0
         ;;
     *)
