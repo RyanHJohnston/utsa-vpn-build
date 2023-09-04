@@ -95,24 +95,36 @@ case $ID in
             16)
                 ;&
             18)
-                apt-get install ./GlobalProtect_deb-*.deb
-                gpclient_info "sudo apt-get remove"
-                exit 0
+                FILE=$(apt-get install ./GlobalProtect_deb-*.deb)
+				if [ -f "$FILE" ]; then
+					printf "\nInstalling the .deb package...\n\n"
+					apt-get install ./GlobalProtect_deb-*.deb
+				else
+					printf "\nInstalling the openconnect package...\n\n"
+					add-apt-repository ppa:yuezk/globalprotect-openconnect -y
+					apt-get update -y
+					apt-get install globalprotect-openconnect -y
+					verify-cert
+					gpclient_info "sudo apt-get remove" "-openconnect"
+				fi
+				exit 0
                 ;;
             *)
-                apt-get install ./GlobalProtect_focal_deb-*.deb
-                gpclient_info "sudo apt-get remove"
+                FILE=$(apt-get install ./GlobalProtect_focal_deb-*.deb)
+				if [ -f "$FILE" ]; then
+					printf "\nInstalling the .deb package...\n\n"
+					apt-get install ./GlobalProtect_focal_deb-*.deb
+				else
+					printf "\nInstalling the openconnect package...\n\n"
+					add-apt-repository ppa:yuezk/globalprotect-openconnect -y
+					apt-get update -y
+					apt-get install globalprotect-openconnect -y
+					verify-cert
+					gpclient_info "sudo apt-get remove" "-openconnect"
+				fi
                 exit 0
                 ;;
         esac
-        
-        # If .deb packages weren't found, install the openconnect package
-        add-apt-repository ppa:yuezk/globalprotect-openconnect -y
-        apt-get update -y
-        apt-get install globalprotect-openconnect -y
-        verify-cert
-        gpclient_info "sudo apt-get remove" "-openconnect"
-        
         ;;
     fedora)
         printf "$open_msg"
