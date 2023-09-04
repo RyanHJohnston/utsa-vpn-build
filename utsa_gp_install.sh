@@ -176,5 +176,26 @@ then
     exit 0
 else
     printf "\nERROR: Linux Distribution not found.\n\n"
-    exit 1
 fi
+
+# If no distro was found, build from source
+printf "\n\n\nNo distro was found, would you like to build from source? [Y/n]: "; read CHOICE;
+if [ "$CHOICE" == [Yy] ]; then
+    git clone https://github.com/yuezk/GlobalProtect-openconnect.git
+    CWD=$(readlink -f .)
+    cd GlobalProtect-openconnect
+    ./scripts/build.sh
+    verify-cert
+    cd $CWD
+    printf "The GlobalProtect-openconnect package was build from source, see their documentation on how to uninstall here: "
+    printf "https://github.com/yuezk/GlobalProtect-openconnect\n"
+    printf "To run the VPN, type: gpclient\n"
+    printf "Portal address: vpn.utsa.edu\n"
+    printf "If any errors were encountered while building from source, make sure the proper right packages are installed\n"
+    printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
+fi
+
+printf "ERROR: No distro was found and not building from source, exiting now\n"
+printf "Contact ryanhjohnstoncollege@gmail.com to get support\n"
+exit 1
+
