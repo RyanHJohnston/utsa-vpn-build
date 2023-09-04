@@ -196,6 +196,6 @@ if [ "$CHOICE" == [Yy] ]; then
 fi
 
 printf "ERROR: No distro was found and not building from source, exiting now\n"
-printf "Contact ryanhjohnstoncollege@gmail.com to get support\n"
+printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
 exit 1
 
