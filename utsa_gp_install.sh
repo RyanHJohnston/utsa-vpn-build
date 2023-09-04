@@ -96,32 +96,32 @@ case $ID in
                 ;&
             18)
                 FILE=$(apt-get install ./GlobalProtect_deb-*.deb)
-				if [ -f "$FILE" ]; then
-					printf "\nInstalling the .deb package...\n\n"
-					apt-get install ./GlobalProtect_deb-*.deb
-				else
-					printf "\nInstalling the openconnect package...\n\n"
-					add-apt-repository ppa:yuezk/globalprotect-openconnect -y
-					apt-get update -y
-					apt-get install globalprotect-openconnect -y
-					verify-cert
-					gpclient_info "sudo apt-get remove" "-openconnect"
-				fi
-				exit 0
+                if [ -f "$FILE" ]; then
+                    printf "\nInstalling the .deb package...\n\n"
+                    apt-get install ./GlobalProtect_deb-*.deb
+                else
+                    printf "\nInstalling the openconnect package...\n\n"
+                    add-apt-repository ppa:yuezk/globalprotect-openconnect -y
+                    apt-get update -y
+                    apt-get install globalprotect-openconnect -y
+                    verify-cert
+                    gpclient_info "sudo apt-get remove" "-openconnect"
+                fi
+                exit 0
                 ;;
             *)
                 FILE=$(apt-get install ./GlobalProtect_focal_deb-*.deb)
-				if [ -f "$FILE" ]; then
-					printf "\nInstalling the .deb package...\n\n"
-					apt-get install ./GlobalProtect_focal_deb-*.deb
-				else
-					printf "\nInstalling the openconnect package...\n\n"
-					add-apt-repository ppa:yuezk/globalprotect-openconnect -y
-					apt-get update -y
-					apt-get install globalprotect-openconnect -y
-					verify-cert
-					gpclient_info "sudo apt-get remove" "-openconnect"
-				fi
+                if [ -f "$FILE" ]; then
+                    printf "\nInstalling the .deb package...\n\n"
+                    apt-get install ./GlobalProtect_focal_deb-*.deb
+                else
+                    printf "\nInstalling the openconnect package...\n\n"
+                    add-apt-repository ppa:yuezk/globalprotect-openconnect -y
+                    apt-get update -y
+                    apt-get install globalprotect-openconnect -y
+                    verify-cert
+                    gpclient_info "sudo apt-get remove" "-openconnect"
+                fi
                 exit 0
                 ;;
         esac
@@ -152,7 +152,7 @@ case $ID in
     arch)
         printf "$open_msg"
         printf "\nInstalling most recent version of globalprotect-openconnect from the official Arch repository...\n\n"
-        
+
         pacman -S globalprotect-openconnect --noconfirm
         verify-cert
         gpclient_info "sudo pacman -R" "-openconnect"
@@ -193,9 +193,9 @@ if [ "$CHOICE" == [Yy] ]; then
     printf "Portal address: vpn.utsa.edu\n"
     printf "If any errors were encountered while building from source, make sure the proper right packages are installed\n"
     printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
-fi
+    fi
 
-printf "ERROR: No distro was found and not building from source, exiting now\n"
-printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
-exit 1
+    printf "ERROR: No distro was found and not building from source, exiting now\n"
+    printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
+    exit 1
 
