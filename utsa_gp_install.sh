@@ -3,19 +3,24 @@
 ######################################################
 # Author: Ryan H. Johnston
 # ID: ide709
-# Department: Tech Cafe
+# Department: Endpoint Solutions Engineering
 
 # Note: run this script as sudoer
 # Ex. sudo ./utsa_gp_install.sh
 #
 # Notes:
-# Creating certs for the official protect .deb and .rpm package is not completed
-# It will be updated to include the official packages soon
-# For now, the open-source globalprotect-openconnect package works just as well
-# It uses the official globalprotect service on the openconnect VPN software
-# This makes it possible to use the service on all linux distributions
-# It can even be built from source
-# The official repository can be found here: https://github.com/yuezk/GlobalProtect-openconnect
+# This script installs the new Global Protect vpn for the following Linux distributions:
+# - Ubuntu
+# - Mint
+# - Anything Debian
+# - Fedora
+# - REHL
+# - Arch
+# It is recommended to download the tarballs from UTSA's link on ServiceNow for the official
+# packages.
+# If the tarballs cannot be found in the directory, then it will install the open source version of
+# GlobalProtect that uses openconnect.
+# Visit here to visit the repo: https://github.com/yuezk/GlobalProtect-openconnect
 ######################################################
 
 
@@ -174,28 +179,7 @@ then
     verify-cert	
     gpclient_info "sudo apt-get remove" "-openconnect"
     exit 0
-else
-    printf "\nERROR: Linux Distribution not found.\n\n"
 fi
 
-# If no distro was found, build from source
-printf "\n\n\nNo distro was found, would you like to build from source? [Y/n]: "; read CHOICE;
-if [ "$CHOICE" == [Yy] ]; then
-    git clone https://github.com/yuezk/GlobalProtect-openconnect.git
-    CWD=$(readlink -f .)
-    cd GlobalProtect-openconnect
-    ./scripts/build.sh
-    verify-cert
-    cd $CWD
-    printf "The GlobalProtect-openconnect package was build from source, see their documentation on how to uninstall here: "
-    printf "https://github.com/yuezk/GlobalProtect-openconnect\n"
-    printf "To run the VPN, type: gpclient\n"
-    printf "Portal address: vpn.utsa.edu\n"
-    printf "If any errors were encountered while building from source, make sure the proper right packages are installed\n"
-    printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
-    fi
-
-    printf "ERROR: No distro was found and not building from source, exiting now\n"
-    printf "Contact ryanhjohnstoncollege@gmail.com for more support\n"
-    exit 1
-
+# If distribution isn't debian, fedora, centos, rehl, or arch, then just print the error message
+printf "Linux distribution not found\n";
