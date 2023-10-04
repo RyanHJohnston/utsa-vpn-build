@@ -3,7 +3,7 @@
 ######################################################
 # Author: Ryan H. Johnston
 # ID: ide709
-# Department: Endpoint Solutions Engineering
+# Department: Tech Cafe
 
 # Note: run this script as sudoer
 # Ex. sudo ./utsa_gp_install.sh
@@ -46,7 +46,7 @@ gpclient_info()
 
 # Must be run as root
 if [ "$EUID" -ne 0 ]; then
-    printf "ERROR: Please run this script as root.\n"
+    printf "ERROR: run this script as root.\n"
     exit 1
 fi
 
